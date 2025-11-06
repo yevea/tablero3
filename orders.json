@@ -1,0 +1,26 @@
+[
+    {
+        "session_id": "cs_test_a1vFmOTWHc1dolvdClfpoDMdNCIf1IJQe2Gctzjm9QCpvfeDCYbxE7T2Yi",
+        "customer_email": "martin@yevea.com",
+        "amount_total": 9999,
+        "currency": "eur",
+        "payment_status": "paid",
+        "date": "2025-10-29 15:51:35"
+    },
+    {
+        "session_id": "cs_test_a1Ci1hkIM6dZYxykgzozJl1UuDUGbMpqVpLFcIKWzKUhrsiIulqHSiywxP",
+        "customer_email": "martin@yevea.com",
+        "amount_total": 171999,
+        "currency": "eur",
+        "payment_status": "paid",
+        "date": "2025-10-30 16:07:56"
+    },
+    {
+        "session_id": "cs_test_a1CZkxeoOakDmrfGJUoorH9yDU5OR4b79gpGeRsRCdO8awPPcYCshH3C1i",
+        "customer_email": "martin@yevea.com",
+        "amount_total": 28800,
+        "currency": "eur",
+        "payment_status": "paid",
+        "date": "2025-10-30 16:17:18"
+    }
+]

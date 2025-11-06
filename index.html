@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero de Madera de Olivo - Tienda Online</title>
+    <meta name="description" content="Tablero de madera de olivo maciza, hecho a mano en España por un artesano personalmente. Personaliza tamaño y cantos. Envío gratis en España. Garantía de 3 años.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2196F3">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <script src="https://js.stripe.com/v3/"></script>
+<style>
+  body {
+    margin: 0 auto;
+    max-width: 25rem;
+    font-family: system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  .screens {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 120px); /* Ajusta según header/footer */
+    overflow: hidden;
+  }
+
+  .screen {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background: white;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .screen.active {
+    left: 0;
+    transform: translateX(0);
+  }
+
+  .screen.prev {
+    left: -100%;
+    transform: translateX(0);
+  }
+
+  .nav-buttons {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .nav-buttons button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: #2196F3;
+    color: white;
+    cursor: pointer;
+  }
+
+  .nav-buttons .btn-prev {
+    background: #999;
+  }
+
+  /* Responsive */
+  @media (min-width: 768px) {
+    .screens {
+      height: auto;
+      overflow: visible;
+    }
+    .screen {
+      position: relative;
+      left: auto;
+      transform: none;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nav-buttons {
+      margin-top: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+    <header>
+        <h1>Tablero de Madera de Olivo</h1>
+        <p>Artesanía española - Personalizable - Envío gratis</p>
+        <button id="installBtn">Instalar App</button>
+        <div id="cartCount">Carrito: <span>0</span></div>
+    </header>
+
+<main class="screens">
+  <!-- Pantalla 1: Dimensiones -->
+  <section class="screen active" data-index="0">
+    <h2>1. Dimensiones</h2>
+            <p>Los tableros se fabrican a mano con madera de olivo maciza por encargo. Personaliza tu tablero según tus especificaciones.</p>
+            <div>
+                <label for="thickness">Grosor (cm):</label>
+                <select id="thickness">
+                    <option value="3">3 cm - 900€/m²</option>
+                    <option value="5" selected>5 cm - 1200€/m²</option>
+                    <option value="7">7 cm - 1500€/m²</option>
+                </select>
+                
+                <label for="length">Longitud (cm) | mínimo 50 cm - máximo 300 cm</label>
+                <div>
+                    <button type="button" onclick="changeValue('length', -10)">−10</button>
+                    <button type="button" onclick="changeValue('length', -1)">−1</button>
+                    <input type="number" id="length" min="50" max="300" value="80" oninput="validateInput(this)">
+                    <button type="button" onclick="changeValue('length', 1)">+1</button>
+                    <button type="button" onclick="changeValue('length', 10)">+10</button>
+                </div>
+                
+                <label for="width">Ancho (cm) | mínimo 20 cm - máximo 100 cm</label>
+                <div>
+                    <button type="button" onclick="changeValue('width', -10)">−10</button>
+                    <button type="button" onclick="changeValue('width', -1)">−1</button>
+                    <input type="number" id="width" min="20" max="100" value="30" oninput="validateInput(this)">
+                    <button type="button" onclick="changeValue('width', 1)">+1</button>
+                    <button type="button" onclick="changeValue('width', 10)">+10</button>
+                </div>
+            </div>
+
+    <div class="nav-buttons">
+      <button class="btn-next">Siguiente →</button>
+    </div>
+  </section>
+
+  <!-- Pantalla 2: Cantos -->
+  <section class="screen" data-index="1">
+    <h2>2. Cantos</h2>
+      <p>Elige el tipo de canto para cada lado: <strong>recto</strong> (cortado a máquina, +0€) o <strong>rústico</strong> (borde natural del árbol, +50€ por canto).</p>
+            <div>
+                <svg id="board-svg" role="img" aria-label="Diagrama de configuración de cantos" width="240" height="180" viewBox="0 0 240 180">
+                    <path id="edge-north" d="M30,60 H210" stroke="#999" stroke-width="6" fill="none"/>
+                    <path id="edge-east" d="M210,60 V140" stroke="#999" stroke-width="6" fill="none"/>
+                    <path id="edge-south" d="M210,140 H30" stroke="#999" stroke-width="6" fill="none"/>
+                    <path id="edge-west" d="M30,140 V60" stroke="#999" stroke-width="6" fill="none"/>
+                    <text x="120" y="20" text-anchor="middle" font-size="12" fill="#667eea">DIAGRAMA DE CANTOS</text>
+                    <text x="120" y="48" text-anchor="middle" font-size="13" fill="#333">Trasero</text>
+                    <text x="225" y="35" text-anchor="start" font-size="13" fill="#333" transform="rotate(90,205,60)">Derecho</text>
+                    <text x="120" y="164" text-anchor="middle" font-size="13" fill="#333">Frontal</text>
+                    <text x="-25" y="73" text-anchor="end" font-size="13" fill="#333" transform="rotate(-90,15,60)">Izquierdo</text>
+                </svg>
+                
+                <div>
+                    <div>
+                        <strong>Canto Trasero</strong><br>
+                        <label>
+                            <input type="radio" name="edge-north" value="recto" checked onchange="updateEdge('north')">
+                            Recto (+0€)
+                        </label>
+                        <label>
+                            <input type="radio" name="edge-north" value="rustico" onchange="updateEdge('north')">
+                            Rústico (+50€)
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <strong>Canto Frontal</strong><br>
+                        <label>
+                            <input type="radio" name="edge-south" value="recto" checked onchange="updateEdge('south')">
+                            Recto (+0€)
+                        </label>
+                        <label>
+                            <input type="radio" name="edge-south" value="rustico" onchange="updateEdge('south')">
+                            Rústico (+50€)
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <strong>Canto Izquierdo</strong><br>
+                        <label>
+                            <input type="radio" name="edge-west" value="recto" checked onchange="updateEdge('west')">
+                            Recto (+0€)
+                        </label>
+                        <label>
+                            <input type="radio" name="edge-west" value="rustico" onchange="updateEdge('west')">
+                            Rústico (+50€)
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <strong>Canto Derecho</strong><br>
+                        <label>
+                            <input type="radio" name="edge-east" value="recto" checked onchange="updateEdge('east')">
+                            Recto (+0€)
+                        </label>
+                        <label>
+                            <input type="radio" name="edge-east" value="rustico" onchange="updateEdge('east')">
+                            Rústico (+50€)
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="edgesSummary"></div>
+            </div>
+    <div class="nav-buttons">
+      <button class="btn-prev">← Anterior</button>
+      <button class="btn-next">Siguiente →</button>
+    </div>
+  </section>
+
+  <!-- Pantalla 3: Uso -->
+  <section class="screen" data-index="2">
+
+            <h2>3. Uso</h2>
+            <p>¿Para qué usarás el tablero? Algunos usos requieren tratamiento especial.</p>
+            <div>
+                <div>
+                    <label>
+                        <input type="radio" name="uso" value="tabletop" id="uso-tabletop" checked>
+                        Encimera de mesa (+0€)
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" name="uso" value="kitchen-countertop" id="uso-kitchen-countertop">
+                        Encimera de cocina (+100€ - tratamiento especial)
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" name="uso" value="kitchen-island" id="uso-kitchen-island">
+                        Isla de cocina (+150€ - tratamiento reforzado)
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" name="uso" value="bathroom-countertop" id="uso-bathroom-countertop">
+                        Encimera de baño (+80€ - tratamiento anti-humedad)
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" name="uso" value="shelf" id="uso-shelf">
+                        Estante (+0€)
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input type="radio" name="uso" value="other" id="uso-other-radio">
+                        Otro (especificar) (+0€)
+                    </label>
+                    <input type="text" id="uso-otro-input" placeholder="¿Para qué lo usarás?">
+                </div>
+                
+                <div id="usageSummary"></div>
+            </div>
+    <div class="nav-buttons">
+      <button class="btn-prev">← Anterior</button>
+      <button class="btn-next">Siguiente →</button>
+    </div>
+  </section>
+
+  <!-- Pantalla 4: Resumen -->
+  <section class="screen" data-index="3">
+    <h2>4. Resumen y Precio</h2>
+            <div id="productSummary">
+                <h3>Producto configurado:</h3>
+                <p><strong>SKU:</strong> <span id="productSKU">--</span></p>
+                <p><strong>Nombre:</strong> <span id="productName">--</span></p>
+                <p><strong>Dimensiones:</strong> <span id="productDimensions">--</span></p>
+                <p><strong>Cantos:</strong> <span id="productEdges">--</span></p>
+                <p><strong>Uso:</strong> <span id="productUsage">--</span></p>
+                
+                <hr>
+                
+                <h3>Desglose de precio:</h3>
+                <table>
+                    <tr>
+                        <td>Precio base (superficie × grosor):</td>
+                        <td align="right"><span id="priceBase">0.00</span> €</td>
+                    </tr>
+                    <tr>
+                        <td>Cantos rústicos (<span id="rusticEdgesCount">0</span> × 50€):</td>
+                        <td align="right"><span id="priceEdges">0.00</span> €</td>
+                    </tr>
+                    <tr>
+                        <td>Tratamiento especial (uso):</td>
+                        <td align="right"><span id="priceUsage">0.00</span> €</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><hr></td>
+                    </tr>
+                    <tr>
+                        <td><strong>PRECIO TOTAL:</strong></td>
+                        <td align="right"><strong><span id="priceDisplay">0.00</span> €</strong></td>
+                    </tr>
+                </table>
+            </div>
+    <div class="nav-buttons">
+      <button class="btn-prev">← Anterior</button>
+      <button class="btn-next">Siguiente →</button>
+    </div>
+  </section>
+
+  <!-- Pantalla 5: Carrito -->
+  <section class="screen" data-index="4">
+    <h2>5. Carrito</h2>
+            <p>Añade el tablero configurado al carrito. Puedes añadir múltiples tableros con diferentes configuraciones.</p>
+            <div>
+                <button id="addToCart">
+                    ➕ Añadir al Carrito
+                </button>
+                <p><small>Hecho a mano • Envío gratis en España • Garantía 5 años</small></p>
+            </div>
+            <div>
+                <div id="cartItems">
+                    <p>Tu carrito está vacío.</p>
+                </div>
+                <div id="totalPrice"></div>
+                <button id="clearCart">Vaciar Carrito</button>
+            </div>
+    <div class="nav-buttons">
+      <button class="btn-prev">← Anterior</button>
+      <button class="btn-next">Siguiente →</button>
+    </div>
+  </section>
+
+  <!-- Pantalla 6: Pago -->
+  <section class="screen" data-index="5">
+    <h2>6. Pago</h2>
+    <p>Procede al pago seguro con Stripe. <strong>Pedido mínimo: 175 €</strong></p>
+            <div>
+                <button id="checkout" disabled>
+                    💳 Completar Pedido →
+                </button>
+                <p><small>Pago 100% Seguro • Entrega en 3 Semanas</small></p>
+            </div>
+    <div class="nav-buttons">
+      <button class="btn-prev">← Anterior</button>
+      <button id="checkout" disabled>💳 Completar Pedido →</button>
+    </div>
+  </section>
+</main>
+
+    <footer>
+        <p><strong>tablero yevea</strong>&nbsp;&copy; 2025&nbsp;todos los&nbsp;derechos reservados</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

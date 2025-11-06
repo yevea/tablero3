@@ -1,0 +1,6 @@
+[29-Oct-2025 15:45:48 UTC] PHP Warning:  require_once(stripe-php/init.php): Failed to open stream: No such file or directory in /home/shopcat/public_html/300/stripe-config.php on line 4
+[29-Oct-2025 15:45:48 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'stripe-php/init.php' (include_path='.:/opt/alt/php84/usr/share/pear:/opt/alt/php84/usr/share/php:/usr/share/pear:/usr/share/php') in /home/shopcat/public_html/300/stripe-config.php:4
+Stack trace:
+#0 /home/shopcat/public_html/300/create-checkout-session.php(2): require_once()
+#1 {main}
+  thrown in /home/shopcat/public_html/300/stripe-config.php on line 4
