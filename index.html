@@ -352,7 +352,7 @@
     <div class="count" aria-hidden="true"></div>
   </div>
 
-  <script>
+<script>
     (function(){
       // small helper: swipe listeners
       function addSwipeListeners(el, onSwipeLeft, onSwipeRight){
@@ -394,16 +394,16 @@
         countEl.textContent = `${index+1} / ${panels.length}`;
       }
 
-      // show/hide header/footer differently on mobile: we apply .hidden class to push them away
+      // show/hide header/footer on mobile
       function updateHeaderFooterForMobile(isMobile){
         if(!isMobile){
           header.classList.remove('hidden');
           footer.classList.remove('hidden');
           return;
         }
-        // on mobile hide header/footer by default; when user scrolls up we could show them (left simple)
-        header.classList.add('hidden');
-        footer.classList.add('hidden');
+        // Show header/footer by default on mobile
+        header.classList.remove('hidden');
+        footer.classList.remove('hidden');
       }
 
       // main mobile view updater
@@ -413,7 +413,11 @@
 
         if(!isMobile){
           // desktop: show all sections
-          panels.forEach(p => p.classList.remove('active'));
+          panels.forEach(p => {
+            p.classList.remove('active');
+            p.style.position = '';
+            p.style.height = '';
+          });
           document.querySelector('.mobile-nav').style.display = 'none';
           indicators.style.display = 'none';
           document.body.style.overflow = '';
@@ -421,9 +425,14 @@
         }
 
         // mobile: only show the active panel
-        panels.forEach((p,i)=> p.classList.toggle('active', i === index));
-        document.querySelector('.mobile-nav').style.display = '';
-        indicators.style.display = '';
+        panels.forEach((p,i)=> {
+          p.classList.toggle('active', i === index);
+          p.style.position = 'fixed';
+          p.style.height = '100vh';
+        });
+        
+        document.querySelector('.mobile-nav').style.display = 'block';
+        indicators.style.display = 'flex';
         document.body.style.overflow = 'hidden';
 
         prevBtn.disabled = index === 0;
@@ -461,18 +470,38 @@
       // initial render
       updateMobileView();
 
-      // optional: show header/footer when user scrolls close to top/bottom of each panel (simple heuristic)
+      // Auto-hide header/footer on scroll with better logic
+      let scrollTimeout;
       panels.forEach(p=>{
         p.addEventListener('scroll', ()=>{
           if(!mq.matches) return;
-          // if scrolled near top, show header for a moment; near bottom, show footer
-          if(p.scrollTop < 40) header.classList.remove('hidden'); else header.classList.add('hidden');
-          if(p.scrollHeight - p.clientHeight - p.scrollTop < 40) footer.classList.remove('hidden'); else footer.classList.add('hidden');
+          
+          clearTimeout(scrollTimeout);
+          
+          // Show header/footer when scrolling starts
+          header.classList.remove('hidden');
+          footer.classList.remove('hidden');
+          
+          // Hide after scrolling stops
+          scrollTimeout = setTimeout(() => {
+            if(p.scrollTop > 50) {
+              header.classList.add('hidden');
+            }
+            if(p.scrollHeight - p.clientHeight - p.scrollTop > 50) {
+              footer.classList.add('hidden');
+            }
+          }, 1500);
+        }, {passive:true});
+        
+        // Show header/footer when touch starts
+        p.addEventListener('touchstart', () => {
+          header.classList.remove('hidden');
+          footer.classList.remove('hidden');
+          clearTimeout(scrollTimeout);
         }, {passive:true});
       });
     })();
-  </script>
-
+</script>
 
 <script src="app.js"></script>
 </body>
