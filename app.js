@@ -68,6 +68,48 @@ if (installBtn) {
     });
 }
 
+// === Actualizar uso ===
+function updateUsage() {
+    const radios = document.querySelectorAll('input[name="uso"]');
+    uso = 'tabletop';
+
+    for (const radio of radios) {
+        if (radio.checked) {
+            uso = radio.value;
+            break;
+        }
+    }
+
+    const otroInput = document.getElementById('uso-otro-input');
+    if (uso === 'other' && otroInput) {
+        otroInput.style.display = 'block';
+        usoOtros = otroInput.value.trim() || 'otro tablero de olivo macizo';
+    } else if (otroInput) {
+        otroInput.style.display = 'none';
+    }
+
+    updateUsageSummary();
+    updatePrice();
+}
+
+// === Resumen de uso ===
+function updateUsageSummary() {
+    const usageLabels = {
+        'tabletop': 'Encimera de mesa',
+        'kitchen-countertop': 'Encimera de cocina',
+        'kitchen-island': 'Isla de cocina',
+        'bathroom-countertop': 'Encimera de baño',
+        'shelf': 'Estante',
+        'other': usoOtros || 'Otro'
+    };
+    
+    const text = usageLabels[uso] || uso;
+    const el = document.getElementById('usageSummary');
+    if (el) {
+        el.innerHTML = `Uso seleccionado: <strong>${text}</strong>`;
+    }
+}
+
 // === Actualizar visualización de cantos ===
 function updateEdge(side) {
     const path = document.getElementById(`edge-${side}`);
@@ -113,48 +155,6 @@ function updateEdgesSummary() {
     const el = document.getElementById('edgesSummary');
     if (el) {
         el.innerHTML = `Configuración de cantos: ${parts.join(', ')}`;
-    }
-}
-
-// === Actualizar uso ===
-function updateUsage() {
-    const radios = document.querySelectorAll('input[name="uso"]');
-    uso = 'tabletop';
-
-    for (const radio of radios) {
-        if (radio.checked) {
-            uso = radio.value;
-            break;
-        }
-    }
-
-    const otroInput = document.getElementById('uso-otro-input');
-    if (uso === 'other' && otroInput) {
-        otroInput.style.display = 'block';
-        usoOtros = otroInput.value.trim() || 'otro tablero de olivo macizo';
-    } else if (otroInput) {
-        otroInput.style.display = 'none';
-    }
-
-    updateUsageSummary();
-    updatePrice();
-}
-
-// === Resumen de uso ===
-function updateUsageSummary() {
-    const usageLabels = {
-        'tabletop': 'Encimera de mesa',
-        'kitchen-countertop': 'Encimera de cocina',
-        'kitchen-island': 'Isla de cocina',
-        'bathroom-countertop': 'Encimera de baño',
-        'shelf': 'Estante',
-        'other': usoOtros || 'Otro'
-    };
-    
-    const text = usageLabels[uso] || uso;
-    const el = document.getElementById('usageSummary');
-    if (el) {
-        el.innerHTML = `Uso seleccionado: <strong>${text}</strong>`;
     }
 }
 
