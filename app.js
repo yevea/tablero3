@@ -270,19 +270,20 @@ function updateProductSummary(thickness, length, width, price) {
     
     const usoText = usageLabels[uso];
     const productName = `${usoText} ${length}x${width}x${thickness} cm, ${edgesText}`;
+    const configuredProduct = `${sku} ${productName}`;
     
-    // Actualizar elementos del DOM
-    const skuEl = document.getElementById('productSKU');
-    const nameEl = document.getElementById('productName');
+    // Actualizar elementos del DOM con el nuevo formato
+    const productTypeEl = document.getElementById('productType');
     const dimensionsEl = document.getElementById('productDimensions');
     const edgesEl = document.getElementById('productEdges');
-    const usageEl = document.getElementById('productUsage');
+    const skuEl = document.getElementById('productSKU');
+    const configuredProductEl = document.getElementById('productConfigured');
     
-    if (skuEl) skuEl.textContent = sku;
-    if (nameEl) nameEl.textContent = productName;
+    if (productTypeEl) productTypeEl.textContent = usoText;
     if (dimensionsEl) dimensionsEl.textContent = `${length} cm × ${width} cm × ${thickness} cm (${(length/100 * width/100).toFixed(2)} m²)`;
     if (edgesEl) edgesEl.textContent = edgesText;
-    if (usageEl) usageEl.textContent = usoText;
+    if (skuEl) skuEl.textContent = sku;
+    if (configuredProductEl) configuredProductEl.textContent = configuredProduct;
 }
 
 // === Generar nombre del producto completo ===
