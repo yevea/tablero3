@@ -109,29 +109,31 @@
             <p>Los tableros se fabrican a mano con madera de olivo maciza por encargo. Personaliza tu tablero según tus especificaciones.</p>
             <div>
                 <label for="thickness">Grosor (cm):</label>
-                <select id="thickness">
+                 <p>
+                     <select id="thickness">
                     <option value="3">3 cm - 900€/m²</option>
                     <option value="5" selected>5 cm - 1200€/m²</option>
                     <option value="7">7 cm - 1500€/m²</option>
-                </select>
+                     </select>
+                 </p>
                 
                 <label for="length">Longitud (cm) | mínimo 50 cm - máximo 300 cm</label>
-                <div>
+                <p>
                     <button type="button" onclick="changeValue('length', -10)">−10</button>
                     <button type="button" onclick="changeValue('length', -1)">−1</button>
                     <input type="number" id="length" min="50" max="300" value="80" oninput="validateInput(this)">
                     <button type="button" onclick="changeValue('length', 1)">+1</button>
                     <button type="button" onclick="changeValue('length', 10)">+10</button>
-                </div>
+                </p>
                 
                 <label for="width">Ancho (cm) | mínimo 20 cm - máximo 100 cm</label>
-                <div>
+                <p>
                     <button type="button" onclick="changeValue('width', -10)">−10</button>
                     <button type="button" onclick="changeValue('width', -1)">−1</button>
                     <input type="number" id="width" min="20" max="100" value="30" oninput="validateInput(this)">
                     <button type="button" onclick="changeValue('width', 1)">+1</button>
                     <button type="button" onclick="changeValue('width', 10)">+10</button>
-                </div>
+                </p>
             </div>
   </section>
 
