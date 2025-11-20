@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="icon-192.png">
     <script src="https://js.stripe.com/v3/"></script>
-  <style>
+<style>
     /* minimal styling */
     :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#111}
     body{margin:0}
@@ -31,23 +31,77 @@
 
     /* MOBILE: make each section occupy the viewport and show only the active one */
     @media (max-width:768px){
-      html,body{height:100%}
-      /* header/footer are kept but animated in/out — you asked to remove differently, so here they slide out when not needed */
-      header, footer{position:fixed;left:0;right:0;z-index:20;transition:transform .28s}
-      header{top:0}
-      footer{bottom:0}
+      html,body{height:100%; margin: 0; padding: 0; overflow: hidden;}
+      
+      /* Fix header and footer positioning */
+      header, footer{
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        transition: transform 0.3s ease-in-out;
+        padding: 1rem;
+      }
+      
+      header{
+        top: 0;
+        transform: translateY(0);
+      }
+      
+      footer{
+        bottom: 0;
+        transform: translateY(0);
+      }
+      
+      header.hidden{
+        transform: translateY(-100%);
+      }
+      
+      footer.hidden{
+        transform: translateY(100%);
+      }
 
-      /* hide header/footer visually by default but still accessible if needed */
-      header.hidden{transform:t¡ranslateY(-110%)}
-      footer.hidden{transform:translateY(110%)}
-
-      section{display:none;height:100vh;box-sizing:border-box;overflow:auto;border-bottom:0;padding-top:3.25rem;padding-bottom:3.25rem}
-      section.active{display:block}
-      .mobile-nav{display:block}
-      .page-indicators{display:flex;position:fixed;bottom:60px;left:0;right:0;justify-content:center;align-items:center;gap:.5rem;z-index:30}
+      /* Fix section positioning to account for header/footer */
+      section{
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        box-sizing: border-box;
+        overflow: auto;
+        border-bottom: 0;
+        padding: 5rem 1.25rem 4rem 1.25rem; /* Adjusted padding to account for header/footer */
+        height: 100vh;
+      }
+      
+      section.active{
+        display: block;
+      }
+      
+      .mobile-nav{
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        z-index: 50;
+      }
+      
+      .page-indicators{
+        display: flex;
+        position: fixed;
+        bottom: 70px;
+        left: 0;
+        right: 0;
+        justify-content: center;
+        align-items: center;
+        gap: .5rem;
+        z-index: 45;
+      }
     }
-  </style>
-</head>
+</style></head>
 <body>
   <header id="siteHeader">
 
