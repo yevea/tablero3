@@ -1,3 +1,4 @@
+
 // app.js - Tienda de Tableros de Olivo
 
 // === Configuración de precios ===
@@ -226,6 +227,7 @@ function updateProductSummary(thickness, length, width, price) {
         .map(s => edges[s] === 'rustico' ? 's' : 'i')
         .join('');
     
+    
     const edgeDescriptions = {
         'ssss': 'todos los cantos rústicos',
         'iiii': 'todos los cantos rectos',
@@ -244,7 +246,6 @@ function updateProductSummary(thickness, length, width, price) {
         'isii': 'canto derecho rústico | resto rectos',
         'iisi': 'canto frontal rústico | resto rectos'
     };
-    
     const edgesText = edgeDescriptions[edgeCode] || `configuración personalizada (${edgeCode})`;
     
     const skuPrefix = {
