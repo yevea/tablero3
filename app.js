@@ -232,17 +232,17 @@ function updateProductSummary(thickness, length, width, price) {
         'sisi': 'cantos longitudinales rústicos | transversales rectos',
         'isis': 'cantos longitudinales rectos | transversales rústicos',
         'isss': 'canto trasero recto | resto rústicos',
-        'siss': 'canto frontal recto | resto rústicos',
-        'sssi': 'canto derecho recto | resto rústicos',
-        'ssii': 'cantos derechos rectos | resto rústicos',
-        'issi': 'cantos trasero y derecho rectos | resto rústicos',
-        'iisi': 'cantos trasero e izquierdo rectos | resto rústicos',
-        'iiss': 'cantos trasero y frontal rectos | resto rústicos',
-        'siis': 'cantos frontal y derecho rectos | resto rústicos',
-        'sisi': 'cantos frontal e izquierdo rectos | resto rústicos',
-        'siii': 'canto izquierdo rústico | resto rectos',
-        'isii': 'canto frontal rústico | resto rectos',
-        'iisi': 'canto derecho rústico | resto rectos'
+        'siss': 'canto derecho recto | resto rústicos',
+        'ssis': 'canto frontal recto | resto rústicos',
+        'sssi': 'canto izquierdo recto | resto rústicos',
+        'ssii': 'cantos trasero y derecho rústicos | resto rectos',
+        'issi': 'cantos derecho y frontal rústicos | resto rectos',
+        'iiss': 'cantos frontal e izquierdo rústicos | resto rectos',
+        'siis': 'cantos trasero e izquierdo rústicos | resto rectos,
+        'sisi': 'cantos trasero y frontal rectos | resto rústicos',
+        'siii': 'canto trasero rústico | resto rectos',
+        'isii': 'canto derecho rústico | resto rectos',
+        'iisi': 'canto frontal rústico | resto rectos'
     };
     
     const edgesText = edgeDescriptions[edgeCode] || `configuración personalizada (${edgeCode})`;
