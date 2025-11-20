@@ -68,48 +68,6 @@ if (installBtn) {
     });
 }
 
-// === Actualizar uso ===
-function updateUsage() {
-    const radios = document.querySelectorAll('input[name="uso"]');
-    uso = 'tabletop';
-
-    for (const radio of radios) {
-        if (radio.checked) {
-            uso = radio.value;
-            break;
-        }
-    }
-
-    const otroInput = document.getElementById('uso-otro-input');
-    if (uso === 'other' && otroInput) {
-        otroInput.style.display = 'block';
-        usoOtros = otroInput.value.trim() || 'otro tablero de olivo macizo';
-    } else if (otroInput) {
-        otroInput.style.display = 'none';
-    }
-
-    updateUsageSummary();
-    updatePrice();
-}
-
-// === Resumen de uso ===
-function updateUsageSummary() {
-    const usageLabels = {
-        'tabletop': 'Encimera de mesa',
-        'kitchen-countertop': 'Encimera de cocina',
-        'kitchen-island': 'Isla de cocina',
-        'bathroom-countertop': 'Encimera de baño',
-        'shelf': 'Estante',
-        'other': usoOtros || 'Otro'
-    };
-    
-    const text = usageLabels[uso] || uso;
-    const el = document.getElementById('usageSummary');
-    if (el) {
-        el.innerHTML = `Uso seleccionado: <strong>${text}</strong>`;
-    }
-}
-
 // === Actualizar visualización de cantos ===
 function updateEdge(side) {
     const path = document.getElementById(`edge-${side}`);
@@ -155,6 +113,48 @@ function updateEdgesSummary() {
     const el = document.getElementById('edgesSummary');
     if (el) {
         el.innerHTML = `Configuración de cantos: ${parts.join(', ')}`;
+    }
+}
+
+// === Actualizar uso ===
+function updateUsage() {
+    const radios = document.querySelectorAll('input[name="uso"]');
+    uso = 'tabletop';
+
+    for (const radio of radios) {
+        if (radio.checked) {
+            uso = radio.value;
+            break;
+        }
+    }
+
+    const otroInput = document.getElementById('uso-otro-input');
+    if (uso === 'other' && otroInput) {
+        otroInput.style.display = 'block';
+        usoOtros = otroInput.value.trim() || 'otro tablero de olivo macizo';
+    } else if (otroInput) {
+        otroInput.style.display = 'none';
+    }
+
+    updateUsageSummary();
+    updatePrice();
+}
+
+// === Resumen de uso ===
+function updateUsageSummary() {
+    const usageLabels = {
+        'tabletop': 'Encimera de mesa',
+        'kitchen-countertop': 'Encimera de cocina',
+        'kitchen-island': 'Isla de cocina',
+        'bathroom-countertop': 'Encimera de baño',
+        'shelf': 'Estante',
+        'other': usoOtros || 'Otro'
+    };
+    
+    const text = usageLabels[uso] || uso;
+    const el = document.getElementById('usageSummary');
+    if (el) {
+        el.innerHTML = `Uso seleccionado: <strong>${text}</strong>`;
     }
 }
 
@@ -227,29 +227,49 @@ function updateProductSummary(thickness, length, width, price) {
         .join('');
     
     const edgeDescriptions = {
-'iiii': 'todos los cantos rectos',
-'iiis':	'canto izquierdo rústico | resto rectos',
-'iisi':	'canto frontal rústico | resto rectos',
-'iiss':	'cantos frontal e izquierdo rústicos | resto rectos',
-'isii':	'canto derecho rústico | resto rectos',
-'isis':	'cantos longitudinales rectos | transversales rústicos',
-'issi':	'cantos derecho y frontal rústicos | resto rectos',
-'isss':	'canto trasero recto | resto rústicos',
-'siii':	'canto trasero rústico | resto rectos',
-'siis':	'cantos trasero e izquierdo rústicos | resto rectos',
-'sisi':	'cantos longitudinales rústicos | transversales rectos',
-'siss':	'canto derecho recto | resto rústicos',
-'ssii':	'cantos trasero y derecho rústicos | resto rectos',
-'ssis':	'canto frontal recto | resto rústicos',
-'sssi':	'canto izquierdo recto | resto rústicos',
-'ssss':	'todos los cantos rústicos'
-};
+        'ssss': 'todos los cantos rústicos',
+        'iiii': 'todos los cantos rectos',
+        'sisi': 'cantos longitudinales rústicos | transversales rectos',
+        'isis': 'cantos longitudinales rectos | transversales rústicos',
+        'isss': 'canto trasero recto | resto rústicos',
+        'siss': 'canto frontal recto | resto rústicos',
+        'sssi': 'canto derecho recto | resto rústicos',
+        'ssii': 'cantos derechos rectos | resto rústicos',
+        'issi': 'cantos trasero y derecho rectos | resto rústicos',
+        'iisi': 'cantos trasero e izquierdo rectos | resto rústicos',
+        'iiss': 'cantos trasero y frontal rectos | resto rústicos',
+        'siis': 'cantos frontal y derecho rectos | resto rústicos',
+        'sisi': 'cantos frontal e izquierdo rectos | resto rústicos',
+        'siii': 'canto izquierdo rústico | resto rectos',
+        'isii': 'canto frontal rústico | resto rectos',
+        'iisi': 'canto derecho rústico | resto rectos'
+    };
     
-    const edgesText = edgeDescriptions[edgeCode] || `configuración personalizada (${edgeCode})`;    
+    const edgesText = edgeDescriptions[edgeCode] || `configuración personalizada (${edgeCode})`;
+    
+    const skuPrefix = {
+        'tabletop': '31',
+        'kitchen-countertop': '32',
+        'kitchen-island': '33',
+        'bathroom-countertop': '34',
+        'shelf': '35',
+        'other': '36'
+    };
+    
     const prefix = skuPrefix[uso] || '36';
-    const sku = `${prefix}-${edgeCode}`;  
+    const sku = `${prefix}-${edgeCode}`;
+    
+    const usageLabels = {
+        'tabletop': 'Encimera de mesa',
+        'kitchen-countertop': 'Encimera de cocina',
+        'kitchen-island': 'Isla de cocina',
+        'bathroom-countertop': 'Encimera de baño',
+        'shelf': 'Estante',
+        'other': usoOtros || 'Otro tablero'
+    };
+    
     const usoText = usageLabels[uso];
-    const productName = `${skuText}. ${usoText}, ${length}x${width}x${thickness}cm, ${edgesText}`;
+    const productName = `${usoText} ${length}x${width}x${thickness} cm, ${edgesText}`;
     
     // Actualizar elementos del DOM
     const skuEl = document.getElementById('productSKU');
@@ -274,6 +294,13 @@ function generateProductName() {
     const edgeCode = ['north','east','south','west']
         .map(s => edges[s] === 'rustico' ? 's' : 'i')
         .join('');
+    
+    const edgeDescriptions = {
+        'ssss': 'todos los cantos rústicos',
+        'iiii': 'todos los cantos rectos',
+        'sisi': 'cantos longitudinales rústicos | transversales rectos',
+        'isis': 'cantos longitudinales rectos | transversales rústicos'
+    };
     
     const edgesText = edgeDescriptions[edgeCode] || `configuración personalizada (${edgeCode})`;
     
