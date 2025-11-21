@@ -232,17 +232,17 @@ function updateProductSummary(thickness, length, width, price) {
         'sisi': 'cantos longitudinales rústicos | transversales rectos',
         'isis': 'cantos longitudinales rectos | transversales rústicos',
         'isss': 'canto trasero recto | resto rústicos',
-        'siss': 'canto frontal recto | resto rústicos',
-        'sssi': 'canto derecho recto | resto rústicos',
-        'ssii': 'cantos derechos rectos | resto rústicos',
-        'issi': 'cantos trasero y derecho rectos | resto rústicos',
-        'iisi': 'cantos trasero e izquierdo rectos | resto rústicos',
-        'iiss': 'cantos trasero y frontal rectos | resto rústicos',
-        'siis': 'cantos frontal y derecho rectos | resto rústicos',
-        'sisi': 'cantos frontal e izquierdo rectos | resto rústicos',
-        'siii': 'canto izquierdo rústico | resto rectos',
-        'isii': 'canto frontal rústico | resto rectos',
-        'iisi': 'canto derecho rústico | resto rectos'
+        'siss': 'canto derecho recto | resto rústicos',
+        'ssis': 'canto frontal recto | resto rústicos',
+        'sssi': 'canto izquierdo recto | resto rústicos',
+        'ssii': 'cantos trasero y derecho rústicos | resto rectos',
+        'issi': 'cantos derecho y frontal rústicos | resto rectos',
+        'iiss': 'cantos frontal e izquierdo rústicos | resto rectos',
+        'siis': 'cantos trasero e izquierdo rústicos | resto rectos',
+        'sisi': 'cantos trasero y frontal rectos | resto rústicos',
+        'siii': 'canto trasero rústico | resto rectos',
+        'isii': 'canto derecho rústico | resto rectos',
+        'iisi': 'canto frontal rústico | resto rectos'
     };
     
     const edgesText = edgeDescriptions[edgeCode] || `configuración personalizada (${edgeCode})`;
@@ -270,19 +270,20 @@ function updateProductSummary(thickness, length, width, price) {
     
     const usoText = usageLabels[uso];
     const productName = `${usoText} ${length}x${width}x${thickness} cm, ${edgesText}`;
+    const configuredProduct = `${sku} ${productName}`;
     
-    // Actualizar elementos del DOM
-    const skuEl = document.getElementById('productSKU');
-    const nameEl = document.getElementById('productName');
+    // Actualizar elementos del DOM con el nuevo formato
+    const productTypeEl = document.getElementById('productType');
     const dimensionsEl = document.getElementById('productDimensions');
     const edgesEl = document.getElementById('productEdges');
-    const usageEl = document.getElementById('productUsage');
+    const skuEl = document.getElementById('productSKU');
+    const configuredProductEl = document.getElementById('productConfigured');
     
-    if (skuEl) skuEl.textContent = sku;
-    if (nameEl) nameEl.textContent = productName;
+    if (productTypeEl) productTypeEl.textContent = usoText;
     if (dimensionsEl) dimensionsEl.textContent = `${length} cm × ${width} cm × ${thickness} cm (${(length/100 * width/100).toFixed(2)} m²)`;
     if (edgesEl) edgesEl.textContent = edgesText;
-    if (usageEl) usageEl.textContent = usoText;
+    if (skuEl) skuEl.textContent = sku;
+    if (configuredProductEl) configuredProductEl.textContent = configuredProduct;
 }
 
 // === Generar nombre del producto completo ===

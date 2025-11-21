@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="icon-192.png">
     <script src="https://js.stripe.com/v3/"></script>
-  <style>
+<style>
     /* minimal styling */
     :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#111}
     body{margin:0}
@@ -31,22 +31,78 @@
 
     /* MOBILE: make each section occupy the viewport and show only the active one */
     @media (max-width:768px){
-      html,body{height:100%}
-      /* header/footer are kept but animated in/out — you asked to remove differently, so here they slide out when not needed */
-      header, footer{position:fixed;left:0;right:0;z-index:20;transition:transform .28s}
-      header{top:0}
-      footer{bottom:0}
+      html,body{height:100%; margin: 0; padding: 0; overflow: hidden;}
+      
+      /* Fix header and footer positioning */
+      header, footer{
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        transition: transform 0.3s ease-in-out;
+        padding: 1rem;
+      }
+      
+      header{
+        top: 0;
+        transform: translateY(0);
+      }
+      
+      footer{
+        bottom: 0;
+        transform: translateY(0);
+      }
+      
+      header.hidden{
+        transform: translateY(-100%);
+      }
+      
+      footer.hidden{
+        transform: translateY(100%);
+      }
 
-      /* hide header/footer visually by default but still accessible if needed */
-      header.hidden{transform:t¡ranslateY(-110%)}
-      footer.hidden{transform:translateY(110%)}
-
-      section{display:none;height:100vh;box-sizing:border-box;overflow:auto;border-bottom:0;padding-top:3.25rem;padding-bottom:3.25rem}
-      section.active{display:block}
-      .mobile-nav{display:block}
-      .page-indicators{display:flex;position:fixed;bottom:60px;left:0;right:0;justify-content:center;align-items:center;gap:.5rem;z-index:30}
+      /* Fix section positioning to account for header/footer */
+      section{
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        box-sizing: border-box;
+        overflow: auto;
+        border-bottom: 0;
+        padding: 5rem 1.25rem 4rem 1.25rem; /* Adjusted padding to account for header/footer */
+        height: 100vh;
+      }
+      
+      section.active{
+        display: block;
+      }
+      
+      .mobile-nav{
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        z-index: 50;
+      }
+      
+      .page-indicators{
+        display: flex;
+        position: fixed;
+        bottom: 70px;
+        left: 0;
+        right: 0;
+        justify-content: center;
+        align-items: center;
+        gap: .5rem;
+        z-index: 45;
+      }
     }
-  </style>
+</style>
+
 </head>
 <body>
   <header id="siteHeader">
@@ -60,7 +116,7 @@
 
   <!-- Pantalla 1: Uso -->
   <section id="s1" class="panel">
-           <h2>1. Uso</h2>
+           <h2>1. Tipo de tablero</h2>
             <p>¿Para qué usarás el tablero? Algunos usos requieren tratamiento especial.</p>
             <div>
                 <div>
@@ -109,29 +165,31 @@
             <p>Los tableros se fabrican a mano con madera de olivo maciza por encargo. Personaliza tu tablero según tus especificaciones.</p>
             <div>
                 <label for="thickness">Grosor (cm):</label>
-                <select id="thickness">
+                 <p>
+                     <select id="thickness">
                     <option value="3">3 cm - 900€/m²</option>
                     <option value="5" selected>5 cm - 1200€/m²</option>
                     <option value="7">7 cm - 1500€/m²</option>
-                </select>
+                     </select>
+                 </p>
                 
                 <label for="length">Longitud (cm) | mínimo 50 cm - máximo 300 cm</label>
-                <div>
+                <p>
                     <button type="button" onclick="changeValue('length', -10)">−10</button>
                     <button type="button" onclick="changeValue('length', -1)">−1</button>
                     <input type="number" id="length" min="50" max="300" value="80" oninput="validateInput(this)">
                     <button type="button" onclick="changeValue('length', 1)">+1</button>
                     <button type="button" onclick="changeValue('length', 10)">+10</button>
-                </div>
+                </p>
                 
                 <label for="width">Ancho (cm) | mínimo 20 cm - máximo 100 cm</label>
-                <div>
+                <p>
                     <button type="button" onclick="changeValue('width', -10)">−10</button>
                     <button type="button" onclick="changeValue('width', -1)">−1</button>
                     <input type="number" id="width" min="20" max="100" value="30" oninput="validateInput(this)">
                     <button type="button" onclick="changeValue('width', 1)">+1</button>
                     <button type="button" onclick="changeValue('width', 10)">+10</button>
-                </div>
+                </p>
             </div>
   </section>
 
@@ -153,8 +211,8 @@
                 </svg>
                 
                 <div>
-                    <div>
-                        <strong>Canto Trasero</strong><br>
+                    <p>
+                        <strong>B</strong> - Canto Trasero<br>
                         <label>
                             <input type="radio" name="edge-north" value="recto" checked onchange="updateEdge('north')">
                             Recto (+0€)
@@ -163,34 +221,10 @@
                             <input type="radio" name="edge-north" value="rustico" onchange="updateEdge('north')">
                             Rústico (+50€)
                         </label>
-                    </div>
+                    </p>
                     
-                    <div>
-                        <strong>Canto Frontal</strong><br>
-                        <label>
-                            <input type="radio" name="edge-south" value="recto" checked onchange="updateEdge('south')">
-                            Recto (+0€)
-                        </label>
-                        <label>
-                            <input type="radio" name="edge-south" value="rustico" onchange="updateEdge('south')">
-                            Rústico (+50€)
-                        </label>
-                    </div>
-                    
-                    <div>
-                        <strong>Canto Izquierdo</strong><br>
-                        <label>
-                            <input type="radio" name="edge-west" value="recto" checked onchange="updateEdge('west')">
-                            Recto (+0€)
-                        </label>
-                        <label>
-                            <input type="radio" name="edge-west" value="rustico" onchange="updateEdge('west')">
-                            Rústico (+50€)
-                        </label>
-                    </div>
-                    
-                    <div>
-                        <strong>Canto Derecho</strong><br>
+                    <p>
+                        <strong>R</strong> - Canto Derecho<br>
                         <label>
                             <input type="radio" name="edge-east" value="recto" checked onchange="updateEdge('east')">
                             Recto (+0€)
@@ -199,51 +233,72 @@
                             <input type="radio" name="edge-east" value="rustico" onchange="updateEdge('east')">
                             Rústico (+50€)
                         </label>
-                    </div>
+                    </p>
+                    
+                    <p>
+                        <strong>F</strong> - Canto Frontal<br>
+                        <label>
+                            <input type="radio" name="edge-south" value="recto" checked onchange="updateEdge('south')">
+                            Recto (+0€)
+                        </label>
+                        <label>
+                            <input type="radio" name="edge-south" value="rustico" onchange="updateEdge('south')">
+                            Rústico (+50€)
+                        </label>
+                    </p>
+                    
+                    <p>
+                        <strong>L</strong> - Canto Izquierdo<br>
+                        <label>
+                            <input type="radio" name="edge-west" value="recto" checked onchange="updateEdge('west')">
+                            Recto (+0€)
+                        </label>
+                        <label>
+                            <input type="radio" name="edge-west" value="rustico" onchange="updateEdge('west')">
+                            Rústico (+50€)
+                        </label>
+                    </p>
                 </div>
                 
                 <div id="edgesSummary"></div>
             </div>
   </section>
-  
-  <!-- Pantalla 4: Resumen y Precio -->
-  <section id="s4" class="panel">
+<!-- Pantalla 4: Resumen y Precio -->
+<section id="s4" class="panel">
     <h2>4. Resumen y Precio</h2>
-            <div id="productSummary">
-                <h3>Producto configurado:</h3>
-                <p><strong>SKU:</strong> <span id="productSKU">--</span></p>
-                <p><strong>Nombre:</strong> <span id="productName">--</span></p>
-                <p><strong>Dimensiones:</strong> <span id="productDimensions">--</span></p>
-                <p><strong>Cantos:</strong> <span id="productEdges">--</span></p>
-                <p><strong>Uso:</strong> <span id="productUsage">--</span></p>
-                
-                <hr>
-                
-                <h3>Desglose de precio:</h3>
-                <table>
-                    <tr>
-                        <td>Precio base (superficie × grosor):</td>
-                        <td align="right"><span id="priceBase">0.00</span> €</td>
-                    </tr>
-                    <tr>
-                        <td>Cantos rústicos (<span id="rusticEdgesCount">0</span> × 50€):</td>
-                        <td align="right"><span id="priceEdges">0.00</span> €</td>
-                    </tr>
-                    <tr>
-                        <td>Tratamiento especial (uso):</td>
-                        <td align="right"><span id="priceUsage">0.00</span> €</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><hr></td>
-                    </tr>
-                    <tr>
-                        <td><strong>PRECIO TOTAL:</strong></td>
-                        <td align="right"><strong><span id="priceDisplay">0.00</span> €</strong></td>
-                    </tr>
-                </table>
-            </div>
-  </section>
-
+    <div id="productSummary">
+        <h3>Producto configurado:</h3>
+        <p><strong>Producto:</strong> <span id="productType">--</span></p>
+        <p><strong>Dimensiones:</strong> <span id="productDimensions">--</span></p>
+        <p><strong>Cantos:</strong> <span id="productEdges">--</span></p>
+        <p><strong>SKU:</strong> <span id="productSKU">--</span></p>
+        <p><strong>Producto configurado:</strong> <span id="productConfigured">--</span></p>              
+        <hr>
+        
+        <h3>Desglose de precio:</h3>
+        <table>
+            <tr>
+                <td>Precio base (superficie × grosor):</td>
+                <td align="right"><span id="priceBase">0.00</span> €</td>
+            </tr>
+            <tr>
+                <td>Cantos rústicos (<span id="rusticEdgesCount">0</span> × 50€):</td>
+                <td align="right"><span id="priceEdges">0.00</span> €</td>
+            </tr>
+            <tr>
+                <td>Tratamiento especial (uso):</td>
+                <td align="right"><span id="priceUsage">0.00</span> €</td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr></td>
+            </tr>
+            <tr>
+                <td><strong>PRECIO TOTAL:</strong></td>
+                <td align="right"><strong><span id="priceDisplay">0.00</span> €</strong></td>
+            </tr>
+        </table>
+    </div>
+</section>
   <!-- Pantalla 5: Carrito -->
   <section id="s5" class="panel">
 
@@ -299,7 +354,7 @@
     <div class="count" aria-hidden="true"></div>
   </div>
 
-  <script>
+<script>
     (function(){
       // small helper: swipe listeners
       function addSwipeListeners(el, onSwipeLeft, onSwipeRight){
@@ -341,16 +396,16 @@
         countEl.textContent = `${index+1} / ${panels.length}`;
       }
 
-      // show/hide header/footer differently on mobile: we apply .hidden class to push them away
+      // show/hide header/footer on mobile
       function updateHeaderFooterForMobile(isMobile){
         if(!isMobile){
           header.classList.remove('hidden');
           footer.classList.remove('hidden');
           return;
         }
-        // on mobile hide header/footer by default; when user scrolls up we could show them (left simple)
-        header.classList.add('hidden');
-        footer.classList.add('hidden');
+        // Show header/footer by default on mobile
+        header.classList.remove('hidden');
+        footer.classList.remove('hidden');
       }
 
       // main mobile view updater
@@ -360,7 +415,11 @@
 
         if(!isMobile){
           // desktop: show all sections
-          panels.forEach(p => p.classList.remove('active'));
+          panels.forEach(p => {
+            p.classList.remove('active');
+            p.style.position = '';
+            p.style.height = '';
+          });
           document.querySelector('.mobile-nav').style.display = 'none';
           indicators.style.display = 'none';
           document.body.style.overflow = '';
@@ -368,9 +427,14 @@
         }
 
         // mobile: only show the active panel
-        panels.forEach((p,i)=> p.classList.toggle('active', i === index));
-        document.querySelector('.mobile-nav').style.display = '';
-        indicators.style.display = '';
+        panels.forEach((p,i)=> {
+          p.classList.toggle('active', i === index);
+          p.style.position = 'fixed';
+          p.style.height = '100vh';
+        });
+        
+        document.querySelector('.mobile-nav').style.display = 'block';
+        indicators.style.display = 'flex';
         document.body.style.overflow = 'hidden';
 
         prevBtn.disabled = index === 0;
@@ -408,18 +472,38 @@
       // initial render
       updateMobileView();
 
-      // optional: show header/footer when user scrolls close to top/bottom of each panel (simple heuristic)
+      // Auto-hide header/footer on scroll with better logic
+      let scrollTimeout;
       panels.forEach(p=>{
         p.addEventListener('scroll', ()=>{
           if(!mq.matches) return;
-          // if scrolled near top, show header for a moment; near bottom, show footer
-          if(p.scrollTop < 40) header.classList.remove('hidden'); else header.classList.add('hidden');
-          if(p.scrollHeight - p.clientHeight - p.scrollTop < 40) footer.classList.remove('hidden'); else footer.classList.add('hidden');
+          
+          clearTimeout(scrollTimeout);
+          
+          // Show header/footer when scrolling starts
+          header.classList.remove('hidden');
+          footer.classList.remove('hidden');
+          
+          // Hide after scrolling stops
+          scrollTimeout = setTimeout(() => {
+            if(p.scrollTop > 50) {
+              header.classList.add('hidden');
+            }
+            if(p.scrollHeight - p.clientHeight - p.scrollTop > 50) {
+              footer.classList.add('hidden');
+            }
+          }, 1500);
+        }, {passive:true});
+        
+        // Show header/footer when touch starts
+        p.addEventListener('touchstart', () => {
+          header.classList.remove('hidden');
+          footer.classList.remove('hidden');
+          clearTimeout(scrollTimeout);
         }, {passive:true});
       });
     })();
-  </script>
-
+</script>
 
 <script src="app.js"></script>
 </body>
